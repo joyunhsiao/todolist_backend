@@ -25,18 +25,36 @@ const requestListener = (req, res) => {
     res.end();
   }else if(req.url == "/todos" && req.method == "POST"){
     req.on("end", () => {
-      const title = JSON.parse(body).title;
-      const todo = {
-        "title": title,
-        "id": uuidv4()
+      try{
+        const title = JSON.parse(body).title;
+        if(title !== undefined) {
+          const todo = {
+            "title": title,
+            "id": uuidv4()
+          };
+          todos.push(todo);
+          res.writeHead(200, headers);
+          res.write(JSON.stringify({
+            "status": "success",
+            "data": todos
+          }));
+          res.end();
+        }else{
+          res.writeHead(400, headers);
+          res.write(JSON.stringify({
+            "status": "false",
+            "message": "欄位未填寫正確，或無此 todo id"
+          }));
+          res.end();
+        }
+      }catch(error){
+        res.writeHead(400, headers);
+        res.write(JSON.stringify({
+          "status": "false",
+          "message": "欄位未填寫正確，或無此 todo id"
+        }));
+        res.end();
       };
-      todos.push(todo);
-      res.writeHead(200, headers);
-      res.write(JSON.stringify({
-        "status": "success",
-        "data": todos
-      }));
-      res.end();
     })
   }else if(req.method == "OPTIONS") {
     res.writeHead(200, headers);
