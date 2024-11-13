@@ -1,6 +1,7 @@
 const http = require("http");
 const { v4: uuidv4 } = require("uuid");
 const errorHandle = require("./errorHandle");
+const successHandle = require("./successHandle");
 
 const todos = [];
 
@@ -35,12 +36,7 @@ const requestListener = (req, res) => {
             "id": uuidv4()
           };
           todos.push(todo);
-          res.writeHead(200, headers);
-          res.write(JSON.stringify({
-            "status": "success",
-            "data": todos
-          }));
-          res.end();
+          successHandle(res, todos);
         }else{
           errorHandle(res);
         }
@@ -50,12 +46,7 @@ const requestListener = (req, res) => {
     })
   }else if(req.url == "/todos" && req.method == "DELETE") {
     todos.length = 0;
-    res.writeHead(200, headers);
-    res.write(JSON.stringify({
-      "status": "success",
-      "data": todos
-    }));
-    res.end();
+    successHandle(res, todos);
   }else if(req.method == "OPTIONS") {
     res.writeHead(200, headers);
     res.end();
