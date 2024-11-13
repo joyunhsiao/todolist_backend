@@ -47,6 +47,13 @@ const requestListener = (req, res) => {
   }else if(req.url == "/todos" && req.method == "DELETE") {
     todos.length = 0;
     successHandle(res, todos);
+  }else if(req.url.startsWith("/todos") && req.method == "DELETE") {
+    const id = req.url.split("/").pop();
+    const index = todos.findIndex(element => element.id == id);
+    if(index !== -1) {
+      todos.splice(index, 1);
+      successHandle(res, todos);
+    }
   }else if(req.method == "OPTIONS") {
     res.writeHead(200, headers);
     res.end();
