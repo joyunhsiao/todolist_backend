@@ -1,5 +1,7 @@
 const http = require("http");
 const { v4: uuidv4 } = require("uuid");
+const errorHandle = require("./errorHandle");
+
 const todos = [];
 
 const requestListener = (req, res) => {
@@ -40,20 +42,10 @@ const requestListener = (req, res) => {
           }));
           res.end();
         }else{
-          res.writeHead(400, headers);
-          res.write(JSON.stringify({
-            "status": "false",
-            "message": "欄位未填寫正確，或無此 todo id"
-          }));
-          res.end();
+          errorHandle(res);
         }
       }catch(error){
-        res.writeHead(400, headers);
-        res.write(JSON.stringify({
-          "status": "false",
-          "message": "欄位未填寫正確，或無此 todo id"
-        }));
-        res.end();
+        errorHandle(res);
       };
     })
   }else if(req.method == "OPTIONS") {
