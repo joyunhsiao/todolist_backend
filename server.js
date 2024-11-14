@@ -54,6 +54,22 @@ const requestListener = (req, res) => {
       todos.splice(index, 1);
       successHandle(res, todos);
     }
+  }else if(req.url.startsWith("/todos") && req.method == "PATCH") {
+    req.on("end", () => {
+      try{
+        const todo = JSON.parse(body).title;
+        const id = req.url.split("/").pop;
+        const index = todos.findIndex(element => element.id == id);
+        if (todo !== undefined && index !== -1) {
+          todos[index].title = todo;
+          successHandle(res, todos);
+        }else{
+          errorHandle(res);
+        }
+      }catch{
+        errorHandle(res);
+      }
+    })
   }else if(req.method == "OPTIONS") {
     res.writeHead(200, headers);
     res.end();
