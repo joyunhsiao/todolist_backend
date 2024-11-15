@@ -2,6 +2,22 @@ const http = require("http");
 const { v4: uuidv4 } = require("uuid");
 const errorHandle = require("./errorHandle");
 const successHandle = require("./successHandle");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+
+dotenv.config({path: "./.env"});
+
+const DB = process.env.DB_PATH.replace(
+  "<DB_USERNAME>", process.env.DB_USERNAME
+).replace(
+  "<DB_PASSWORD>", process.env.DB_PASSWORD
+)
+
+mongoose.connect(DB)
+  .then(
+    () => {console.log("success")},
+    error => {console.log("error", error.reason)}
+  );
 
 const todos = [];
 
