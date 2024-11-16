@@ -4,6 +4,8 @@ const errorHandle = require("./errorHandle");
 const successHandle = require("./successHandle");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const User = require("./models/users");
+const Todo = require("./models/todos");
 
 dotenv.config({path: "./.env"});
 
