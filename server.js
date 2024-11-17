@@ -13,6 +13,8 @@ const DB = process.env.DB_PATH.replace(
   "<DB_USERNAME>", process.env.DB_USERNAME
 ).replace(
   "<DB_PASSWORD>", process.env.DB_PASSWORD
+).replace(
+  "<DB_NAME>", process.env.DB_NAME
 )
 
 mongoose.connect(DB)
