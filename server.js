@@ -21,9 +21,7 @@ mongoose.connect(DB)
     error => {console.log("error", error.reason)}
   );
 
-const todos = [];
-
-const requestListener = (req, res) => {
+const requestListener = async (req, res) => {
   const headers = {
     "Access-Control-Allow-Headers": "Content-Type, Authorization, Content-Length, X-Requested-With",
     "Access-Control-Allow-Origin": "*",
@@ -38,12 +36,8 @@ const requestListener = (req, res) => {
   });
 
   if(req.url == "/todos" && req.method == "GET") {
-    res.writeHead(200, headers);
-    res.write(JSON.stringify({
-      "status": "success",
-      "data": todos
-    }));
-    res.end();
+    const todos = await Todo.find();
+    successHandle(res, todos);
   }else if(req.url == "/todos" && req.method == "POST"){
     req.on("end", () => {
       try{
