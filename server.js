@@ -68,7 +68,7 @@ const requestListener = async (req, res) => {
       };
     })
   }else if(req.url == "/todos" && req.method == "DELETE") {
-    todos.length = 0;
+    const todos = await Todo.deleteMany({});
     successHandle(res, todos);
   }else if(req.url.startsWith("/todos") && req.method == "DELETE") {
     const id = req.url.split("/").pop();
