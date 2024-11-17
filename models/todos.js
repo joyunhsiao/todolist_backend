@@ -5,10 +5,6 @@ const todoSchema = new mongoose.Schema(
     title: {
       type: String,
       required: [true, "此欄位必填"]
-    },
-    id: {
-      type: String,
-      required: [true, "此欄位必填"]
     }
   },
   {

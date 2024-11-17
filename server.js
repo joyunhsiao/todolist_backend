@@ -1,5 +1,4 @@
 const http = require("http");
-const { v4: uuidv4 } = require("uuid");
 const errorHandle = require("./errorHandle");
 const successHandle = require("./successHandle");
 const mongoose = require("mongoose");
@@ -45,12 +44,22 @@ const requestListener = async (req, res) => {
       try{
         const title = JSON.parse(body).title;
         if(title !== undefined) {
-          const todo = {
-            "title": title,
-            "id": uuidv4()
-          };
-          todos.push(todo);
-          successHandle(res, todos);
+          Todo.create(
+            {
+              "title": title
+            }
+          ).then(
+            async () => {
+              console.log("資料寫入成功");
+              const todos = await Todo.find();
+              successHandle(res, todos);
+            }
+          ).catch(
+            error => {
+              console.log(error.errors);
+              errorHandle(res);
+            }
+          );
         }else{
           errorHandle(res);
         }
