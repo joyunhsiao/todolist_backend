@@ -40,30 +40,19 @@ const requestListener = async (req, res) => {
     const todos = await Todo.find();
     successHandle(res, todos);
   }else if(req.url == "/todos" && req.method == "POST"){
-    req.on("end", () => {
+    req.on("end", async () => {
       try{
         const title = JSON.parse(body).title;
         if(title !== undefined) {
-          Todo.create(
-            {
-              "title": title
-            }
-          ).then(
-            async () => {
-              console.log("資料寫入成功");
-              const todos = await Todo.find();
-              successHandle(res, todos);
-            }
-          ).catch(
-            error => {
-              console.log(error.errors);
-              errorHandle(res);
-            }
-          );
+          await Todo.create({ title });
+          console.log("資料寫入成功");
+          const todos = await Todo.find();
+          successHandle(res, todos);
         }else{
           errorHandle(res);
         }
       }catch(error){
+        console.log(error.errors || error)
         errorHandle(res);
       };
     })
