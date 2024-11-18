@@ -69,18 +69,19 @@ const requestListener = async (req, res) => {
       errorHandle(res);
     }
   }else if(req.url.startsWith("/todos") && req.method == "PATCH") {
-    req.on("end", () => {
+    req.on("end", async () => {
       try{
-        const todo = JSON.parse(body).title;
         const id = req.url.split("/").pop();
-        const index = todos.findIndex(element => element.id == id);
-        if (todo !== undefined && index !== -1) {
-          todos[index].title = todo;
+        if (await Todo.findById(`${id}`) !== null){
+          const title = JSON.parse(body).title;
+          await Todo.findByIdAndUpdate(`${id}`, { title });
+          const todos = await Todo.find();
           successHandle(res, todos);
         }else{
           errorHandle(res);
         }
-      }catch{
+      }catch(error){
+        console.log(error.errors || error)
         errorHandle(res);
       }
     })
