@@ -61,10 +61,12 @@ const requestListener = async (req, res) => {
     successHandle(res, todos);
   }else if(req.url.startsWith("/todos") && req.method == "DELETE") {
     const id = req.url.split("/").pop();
-    const index = todos.findIndex(element => element.id == id);
-    if(index !== -1) {
-      todos.splice(index, 1);
+    if (await Todo.findById(`${id}`) !== null){
+      await Todo.findByIdAndDelete(`${id}`);
+      const todos = await Todo.find();
       successHandle(res, todos);
+    }else{
+      errorHandle(res);
     }
   }else if(req.url.startsWith("/todos") && req.method == "PATCH") {
     req.on("end", () => {
