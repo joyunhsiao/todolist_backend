@@ -61,8 +61,8 @@ const requestListener = async (req, res) => {
     successHandle(res, todos);
   }else if(req.url.startsWith("/todos") && req.method == "DELETE") {
     const id = req.url.split("/").pop();
-    if (await Todo.findById(`${id}`) !== null){
-      await Todo.findByIdAndDelete(`${id}`);
+    if (await Todo.findById(id) !== null){
+      await Todo.findByIdAndDelete(id);
       const todos = await Todo.find();
       successHandle(res, todos);
     }else{
@@ -72,9 +72,9 @@ const requestListener = async (req, res) => {
     req.on("end", async () => {
       try{
         const id = req.url.split("/").pop();
-        if (await Todo.findById(`${id}`) !== null){
+        if (await Todo.findById(id) !== null){
           const title = JSON.parse(body).title;
-          await Todo.findByIdAndUpdate(`${id}`, { title });
+          await Todo.findByIdAndUpdate(id, { title });
           const todos = await Todo.find();
           successHandle(res, todos);
         }else{
